@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var _ = require("underscore");
 
 app = express();
 var PORT = process.env.PORT||3000;
@@ -44,7 +45,7 @@ app.post('/todos',function(req,res){
     todos.push(body);
 
     console.log('description: '+body.description);
-    res.json(todos);
+    res.json(body);
 
 });
 
