@@ -18,34 +18,45 @@ var TODO = sequelize.define('todo', {
 	}
 });
 
-sequelize.sync({force:true}).then(function(){
+sequelize.sync(
+	//{force:true}
+	).then(function(){
 	console.log('Everything is synced');
-	TODO.create({
-		description: 'Take out trash'
-		
-	}).then(function(todo){
-		return TODO.create({
-			description:'Clean office'
-		});
-	}).then(function(){
-		// return TODO.findById(1);
-		return TODO.findAll({
-			where:{
-				description:{
-					$like:'%%Office'
-				}
-			}
-		});
-	}).then(function(todos){
-		if(todos){
-			todos.forEach(function(todo){
 
+	TODO.findById(3).then(function(todo){
+		if(todo){
 			console.log(todo.toJSON());
-		});
 		}else{
-			console.log('no todo found!');
+			console.log("Todo not found");
 		}
-	}).catch(function(e){
-		console.log(e);
 	});
+
+	// TODO.create({
+	// 	description: 'Take out trash'
+		
+	// }).then(function(todo){
+	// 	return TODO.create({
+	// 		description:'Clean office'
+	// 	});
+	// }).then(function(){
+	// 	// return TODO.findById(1);
+	// 	return TODO.findAll({
+	// 		where:{
+	// 			description:{
+	// 				$like:'%%Office'
+	// 			}
+	// 		}
+	// 	});
+	// }).then(function(todos){
+	// 	if(todos){
+	// 		todos.forEach(function(todo){
+
+	// 		console.log(todo.toJSON());
+	// 	});
+	// 	}else{
+	// 		console.log('no todo found!');
+	// 	}
+	// }).catch(function(e){
+	// 	console.log(e);
+	// });
 });
