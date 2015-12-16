@@ -8,14 +8,32 @@ var todos =[];
 var todoNextId=1;
 
 app.use(bodyParser.json());
+
 app.get('/',function(req,res){
     res.send('TODO api Root');
 });
 
+// GET /todos?completed=true
 app.get('/todos',function(req,res){
-   res.json(todos);
+    var queryParams = req.query;
+    var filteredTodos=todos;
+
+    if(queryParams.hasOwnProperty('completed')&& queryParams.completed=='true')
+    {
+        filteredTodos= _.findWhere(filteredTodos,{completed:true})
+
+    }else{
+        if(queryParams.hasOwnProperty('completed') && queryParams.completed=='false')
+        {
+            filteredTodos= _.findWhere(filteredTodos,{completed:false})
+
+        }
+    }
+
+    res.json(filteredTodos);
 });
 
+// GET /todos/:id
 app.get('/todos/:id',function(req,res){
     var todoID=parseInt(req.params.id,10);
     var matchedTODO= _.findWhere(todos,{id:todoID});
@@ -30,7 +48,7 @@ app.get('/todos/:id',function(req,res){
    res.send('Asking for TODO with id of :' + req.params.id);
 });
 
-//POST
+//POST /todos
 app.post('/todos',function(req,res){
     var body = _.pick(req.body,'description','completed','id');
 
