@@ -37,7 +37,7 @@ app.get('/todos',function(req,res){
          },function(e){
             res.status(500).send();
     });
-    
+
 });
 
 // GET /todos/:id
@@ -73,14 +73,29 @@ app.post('/todos',function(req,res){
 
 app.delete('/todos/:id',function(req,res){
     var todoID=parseInt(req.params.id,10);
-   var matchedTODO= _.findWhere(todos,{id:todoID});
 
-    if(!matchedTODO){
-        res.status(404).json({"error":"no todo found with that id"});
-    }else{
-        todos = _.without(todos, matchedTODO);
-        res.json(matchedTODO);
-    }
+    db.todo.destroy({
+
+            where:{
+                id:todoID
+            }
+
+    }).then(function(rowsDeleted){
+        if(rowsDeleted===0){
+            res.status(404).send({
+                error:'No todo with id'
+            });
+
+        }else{
+            res.status(204).send();
+        }
+    },function(e){
+        res.status(404).json({
+            error:'No todo with id'
+        });
+    });
+
+
 
 });
 
