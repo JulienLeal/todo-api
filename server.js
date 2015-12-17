@@ -43,16 +43,16 @@ app.get('/todos',function(req,res){
 // GET /todos/:id
 app.get('/todos/:id',function(req,res){
     var todoID=parseInt(req.params.id,10);
-    var matchedTODO= _.findWhere(todos,{id:todoID});
+    db.todo.findById(todoID).then(function(todo){
+        if(!!todo){
+            res.json(todo.toJSON());
+        }else{
+            res.status(404).send();
+        }
+    }, function(e){
+        res.status(500).send();
+    });
 
-
-    if(matchedTODO){
-        res.json(matchedTODO);
-    }else{
-        res.status(404).send();
-    }
-
-   res.send('Asking for TODO with id of :' + req.params.id);
 });
 
 //POST /todos
@@ -68,16 +68,6 @@ app.post('/todos',function(req,res){
     }).catch(function(e){
         return res.status(400).json(e);
     });
-    //
-    //body.description = body.description.trim();
-    //
-    //body.id=todoNextId;
-    //todoNextId++;
-    //
-    //todos.push(body);
-    //
-    //console.log('description: '+body.description);
-
 
 });
 
@@ -121,7 +111,9 @@ app.put('/todos/:id',function(req,res){
     res.json(matchedTODO);
 
 });
-db.sequelize.sync({force:true}).then(function(){
+db.sequelize.sync(
+    //{force:true}
+).then(function(){
 
     app.listen(PORT,function(){
         console.log('Express listening port :'+PORT);
