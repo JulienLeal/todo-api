@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.get('/',function(req,res){
     res.send('TODO api Root');
 });
-
+//teste
 // GET /todos?completed=true
 app.get('/todos',function(req,res){
     var query = req.query;
