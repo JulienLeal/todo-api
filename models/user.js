@@ -17,5 +17,14 @@ module.exports=function(sequelize, DateTypes) {
         }
 
 
+    }, {
+        hooks:{
+            beforeValidate:function(user,option){
+                //user.email
+                if(typeof user.email==="string"){
+                    user.email=user.email.toLowerCase();
+                }
+            }
+        }
     });
 }
