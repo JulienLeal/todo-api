@@ -82,6 +82,7 @@ module.exports=function(sequelize, DataTypes) {
                 }
                 try{
                     var stringData = JSON.stringify({id:this.get('id'),type:type});
+
                     var encryptedData = cryptjs.AES.encrypt(stringData,'abc123!@!').toString();
                     var token = jwt.sign({
                         token:encryptedData
